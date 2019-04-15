@@ -1,0 +1,12 @@
+{
+  "name": "firebase-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server --port=1337"
+   
+  },
+  "author": "",
+  "license": "ISC"
+}
