@@ -1,3 +1,5 @@
+import store from '../scripts/store.js';
+
 export default class Sign {
     
     constructor(router) {
@@ -18,8 +20,21 @@ export default class Sign {
     onSubmitLogin(event) {
         event.preventDefault();// Empêche le navigateur de recharger la page
 
+        const email            = document.getElementById('login_email').value;
+        const password         = document.getElementById('login_password').value;
        
-        console.log('Connexion !');
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(userCredentials => firebase.firestore().collection('users').doc(userCredentials.user.uid).get())
+            .then(userDoc => {
+                userDoc = userDoc.data();
+                console.log('Connecté !', userDoc);
+
+                store.setState({ user: userDoc });
+                this.router.navigateTo('/chat');
+        
+            })
+            .catch(error => this.displayError(error + '\n' + error.message));
+        
     }
 
     onSubmitSignin(event) {

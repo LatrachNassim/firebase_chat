@@ -1,12 +1,13 @@
+<div id="wrapper" class="d-none">
 <h1>Bienvenue {{ fullname }}</h1>
 <hr>
 
-<div class="input-group mt-4">
+<form id="addMessage" class="input-group mt-4">
     <input type="text" name="message" id="message" class="form-control" placeholder="Votre message ..." autofocus>
     <div class="input-group-append">
         <button class="btn btn-outline-primary" type="submit">Envoyer</button>
     </div>
-</div>
+</form>
 
 <ul id="messages" class="list-group list-group-flush mt-4">
     
@@ -38,4 +39,5 @@
     </li>
     
 </ul>
+</div>
 
