@@ -18,6 +18,9 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarContent">
+            
+        </div>
+        <script type="text/template" id="menu-loggued">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/#/chat">Chat</a>
@@ -25,10 +28,20 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
+                    <a class="nav-link" href="/#/logout">Déconnexion</a>
+                </li>
+            </ul>
+        </script>
+
+
+        <script type="text/template" id="menu-unloggued">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
                     <a class="nav-link" href="/#/">Connexion/Inscription</a>
                 </li>
             </ul>
-        </div>
+        </script>
+
     </nav>
 </header>
 
@@ -39,6 +52,8 @@
 <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-storage.js"></script>
 <script src="https://unpkg.com/vanilla-router@1.2.7/dist/vanilla-router.min.js"></script>
 
 <script src="scripts/index.js" type="module"></script>

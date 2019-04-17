@@ -49,6 +49,14 @@ export default class Sign {
 
         console.log(firstname, lastname, email, password, password_confirm, avatar);
 
+        const storageRef = firebase.storage().ref()
+            .then((userCredentials) => firebase.firestorage().collection('users').doc(userCredentials.user.uid).set({ firstname, lastname, email }))
+            .catch(error => {
+                this.displayError(error.code + '\n' + error.message);
+            });
+        
+
+
         if (password != password_confirm){
             return this.displayError('Les mots de passe ne correspondent pas');
             

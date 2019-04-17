@@ -14,34 +14,39 @@ export default class Chat {
 
     init() {
         console.log('CHAT !');
-
-        // Recuperation de l'utilisateur en cours
-        firebase.auth().onAuthStateChanged(user => {
-            firebase.firestore().collection('users').doc(user.uid).get()
-                .then(user => {
-
-                    //Mise à  jour
-                    store.setState({ user: user.data() })
-                    
-                    //definition de l'utilisateur
-                    this.user = user.data();
-
-                    const wrapper = document.getElementById("wrapper");
-                    wrapper.classList.remove("d-none");
-                    wrapper.getElementsByTagName("h1")[0].textContent = `Bienvenue ${this.user.firstname} ${this.user.lastname}`;
-
-
-                    this.initChat();
+        
 
                     
-                });
-            
-        });
+        //definition de l'utilisateur
+        this.user = store.getState().user;
+
+        //Si il n'y a pas d'utilisateur
+        if (!this.user) {
+            this.router.navigateTo('/');
+            return;
+        }
+
+        // Affichage de la page
+        const wrapper = document.getElementById("wrapper");
+        wrapper.classList.remove("d-none");
+        wrapper.getElementsByTagName("h1")[0].textContent = `Bienvenue ${this.user.firstname} ${this.user.lastname}`;
+
+        this.initChat();
+
     }
 
     initChat() {
         // Initialisation des gestionnaire d'événement du chat
         document.getElementById('addMessage').addEventListener('submit', this.onAddMessage.bind(this), false);
+
+        firebase.database().ref('/messages').limitToLast(15).on('value', snapshot => {
+            this.messages.length = 0; // Vide le tableau
+            snapshot.forEach(item => {
+                this.messages.push(item.val());
+            });
+            this.messages = this.messages.reverse();
+            this.renderMessages();
+        });
 
     }
 
@@ -54,7 +59,7 @@ export default class Chat {
 
         if (!messageEl.value) return;
 
-        this.messages.push({
+        firebase.database().ref('/messages').push({
             pseudo: `${firstname} ${lastname}`,
             message: messageEl.value,
             date: Date.now(),
