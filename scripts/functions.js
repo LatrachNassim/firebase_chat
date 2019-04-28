@@ -7,14 +7,14 @@ export function dispatchRoute(controller) {
     if (controller.view === null) {
         return controller.init();
     }
-    
+
 
     return fetch(`views/${controller.view}`)
-            .then(res => res.text())
-            .then(htmlText => {
-                document.getElementsByTagName('main')[0].innerHTML = htmlText;
-                controller.init();
-            });
+        .then(res => res.text())
+        .then(htmlText => {
+            document.getElementsByTagName('main')[0].innerHTML = htmlText;
+            controller.init();
+        });
 }
 
 export function setLogguedMode(user) {

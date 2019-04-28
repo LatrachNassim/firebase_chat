@@ -1,7 +1,7 @@
 import store from '../scripts/store.js';
 
 export default class Sign {
-    
+
     constructor(router) {
         this.router = router;
         this.view = 'sign.html';
@@ -20,9 +20,9 @@ export default class Sign {
     onSubmitLogin(event) {
         event.preventDefault();// Empêche le navigateur de recharger la page
 
-        const email            = document.getElementById('login_email').value;
-        const password         = document.getElementById('login_password').value;
-       
+        const email = document.getElementById('login_email').value;
+        const password = document.getElementById('login_password').value;
+
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(userCredentials => firebase.firestore().collection('users').doc(userCredentials.user.uid).get())
             .then(userDoc => {
@@ -31,44 +31,42 @@ export default class Sign {
 
                 store.setState({ user: userDoc });
                 this.router.navigateTo('/chat');
-        
+
             })
             .catch(error => this.displayError(error + '\n' + error.message));
-        
+
     }
 
-    onSubmitSignin(event) {
+    async onSubmitSignin(event) {
         event.preventDefault();
 
-        const firstname        = document.getElementById('signin_firstname').value;
-        const lastname         = document.getElementById('signin_lastname').value;
-        const email            = document.getElementById('signin_email').value;
-        const password         = document.getElementById('signin_password').value;
+        const firstname = document.getElementById('signin_firstname').value;
+        const lastname = document.getElementById('signin_lastname').value;
+        const email = document.getElementById('signin_email').value;
+        const password = document.getElementById('signin_password').value;
         const password_confirm = document.getElementById('signin_password_confirm').value;
-        const avatar           = document.getElementById('signin_avatar').files[0];
+        const avatar = document.getElementById('signin_avatar').files[0];
 
-        console.log(firstname, lastname, email, password, password_confirm, avatar);
+        console.log(firstname, lastname, email, password, password_confirm, avatar)
 
-        const storageRef = firebase.storage().ref()
-            .then((userCredentials) => firebase.firestorage().collection('users').doc(userCredentials.user.uid).set({ firstname, lastname, email }))
-            .catch(error => {
-                this.displayError(error.code + '\n' + error.message);
-            });
-        
-
-
-        if (password != password_confirm){
+        if (password != password_confirm) {
             return this.displayError('Les mots de passe ne correspondent pas');
-            
-            return;
+
+
         }
         // Tentative de création de compte de firebase
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then((userCredentials) => firebase.firestore().collection('users').doc(userCredentials.user.uid).set({ firstname, lastname, email }))
-            .then(() =>    this.router.navigateTo('/chat'))
-            .catch(error => {
-                this.displayError(error.code + '\n' + error.message);
-            });
+        try {
+            const userCredentials = await firebase.auth().createUserWithEmailAndPassword(email, password);
+            const avatarRef = firebase.storage().ref(`avatars/${userCredentials.user.uid}`);
+
+            await avatarRef.put(avatar);
+            const avatarUrl = await avatarRef.getDownloadURL();
+            await firebase.firestore().collection('users').doc(userCredentials.user.uid).set({ firstname, lastname, email, avatarUrl });
+
+            this.router.navigateTo('/chat');
+        } catch (error) {
+            this.displayError(error.code + '\n' + error.message);
+        }
     }
 
     onGoogle(event) {
@@ -80,9 +78,9 @@ export default class Sign {
 
     /*onTwitter(event) {
         event.preventDefault();
-
+ 
         console.log('Twitter !');
-
+ 
     }*/
 
     onGithub(event) {
@@ -93,8 +91,8 @@ export default class Sign {
     }
     displayError(errorMessage) {
         let error = document.getElementById('error');
-            error.classList.remove('d-none');
-            error.textContent = errorMessage;
+        error.classList.remove('d-none');
+        error.textContent = errorMessage;
 
 
     }

@@ -8,7 +8,7 @@ export default {
     },
 
     setState(newState) {
-        _state = { ..._state, ...newState};
+        _state = { ..._state, ...newState };
 
     },
 };

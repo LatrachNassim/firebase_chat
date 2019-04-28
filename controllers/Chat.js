@@ -3,7 +3,7 @@ import store from '../scripts/store.js'
 
 
 export default class Chat {
-    
+
     constructor(router) {
         this.router = router;
         this.view = 'chat.html';
@@ -14,9 +14,9 @@ export default class Chat {
 
     init() {
         console.log('CHAT !');
-        
 
-                    
+
+
         //definition de l'utilisateur
         this.user = store.getState().user;
 
@@ -67,7 +67,7 @@ export default class Chat {
 
         messageEl.value = ''; // Vide le champs <input>
 
-        
+
 
         this.renderMessages();
     }

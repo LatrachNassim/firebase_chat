@@ -13,7 +13,7 @@ const router = new Router({
     mode: 'hash'
 });
 
-router.add('/', () => dispatchRoute(new Sign(router))); 
+router.add('/', () => dispatchRoute(new Sign(router)));
 router.add('/chat', () => dispatchRoute(new Chat(router)));
 
 router.addUriListener();
@@ -37,6 +37,6 @@ firebase.auth().onAuthStateChanged(user => {
         // Redirection vers la page de chat
         router.navigateTo('/chat');
     });
-        
+
 });
 
